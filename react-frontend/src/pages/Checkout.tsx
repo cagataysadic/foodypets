@@ -142,7 +142,7 @@ const Checkout: React.FC = () => {
                                 placeholder="Card Number"
                                 value={cardNumber}
                                 onChange={handleCardNumberChange}
-                                type="tel" // To bring up numeric keypad on mobile devices
+                                type="tel"
                             />
                             <div className="w-3/4 flex justify-between lg:my-2 my-1">
                                 <input
