@@ -11,6 +11,31 @@ const Checkout: React.FC = () => {
     const [selectedMethod, setSelectedMethod] = useState('Flat-Rate');
     const navigate = useNavigate();
 
+    const [cardNumber, setCardNumber] = useState<string>('');
+    const [expirationDate, setExpirationDate] = useState<string>('');
+    const [securityCode, setSecurityCode] = useState<string>('');
+
+    const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        const formattedValue = value.replace(/\D/g, '').slice(0, 16);
+        setCardNumber(formattedValue);
+    };
+
+    const handleExpirationDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let { value } = e.target;
+        value = value.replace(/\D/g, '');
+        if (value.length > 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        }
+        setExpirationDate(value);
+    };
+
+    const handleSecurityCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        const formattedValue = value.replace(/\D/g, '').slice(0, 3);
+        setSecurityCode(formattedValue);
+    };
+
     useEffect(() => {
         dispatch(fetchCartItems())
     }, [dispatch]);
@@ -112,10 +137,28 @@ const Checkout: React.FC = () => {
                             <div className="lg:h-16 h-8 w-full flex flex-col justify-center border-b-2 border-zinc-300">
                                 <h1 className="lg:text-2xl text-lg lg:ml-10 ml-5">Payment Info</h1>
                             </div>
-                            <input className="lg:h-12 h-8 lg:p-2 p-1 inline-block rounded border border-zinc-500 w-3/4 text-zinc-900 lg:my-2 my-1" placeholder="Card Number" />
+                            <input
+                                className="lg:h-12 h-8 lg:p-2 p-1 inline-block rounded border border-zinc-500 w-3/4 text-zinc-900 lg:my-2 my-1"
+                                placeholder="Card Number"
+                                value={cardNumber}
+                                onChange={handleCardNumberChange}
+                                type="tel" // To bring up numeric keypad on mobile devices
+                            />
                             <div className="w-3/4 flex justify-between lg:my-2 my-1">
-                                <input className="lg:h-12 h-8 lg:p-2 p-1 inline-block rounded border border-zinc-500 w-1/2 text-zinc-900 lg:mr-2 mr-1" placeholder="Expiration Date" />
-                                <input className="lg:h-12 h-8 lg:p-2 p-1 inline-block rounded border border-zinc-500 w-1/2 text-zinc-900 lg:ml-2 ml-1" placeholder="Security Code" />
+                                <input
+                                    className="lg:h-12 h-8 lg:p-2 p-1 inline-block rounded border border-zinc-500 w-1/2 text-zinc-900 lg:mr-2 mr-1"
+                                    placeholder="Expiration Date"
+                                    value={expirationDate}
+                                    onChange={handleExpirationDateChange}
+                                    type="tel"
+                                />
+                                <input
+                                    className="lg:h-12 h-8 lg:p-2 p-1 inline-block rounded border border-zinc-500 w-1/2 text-zinc-900 lg:ml-2 ml-1"
+                                    placeholder="Security Code"
+                                    value={securityCode}
+                                    onChange={handleSecurityCodeChange}
+                                    type="tel"
+                                />
                             </div>
                             <button className="bg-zinc-900 lg:h-12 h-8 rounded hover:bg-zinc-600 text-zinc-100 w-1/2 p-1 lg:mb-4 mb-2" onClick={handleClick}>CHECKOUT</button>
                         </div>
