@@ -43,7 +43,6 @@ const Profile: React.FC = () => {
             dispatch(setErrorMessage("Your password should contain at least 8 characters, should contain a capital letter, a lower letter, a number and a special character."));
             return;
         }
-        console.log({password, newPassword});
         dispatch(updatePassword({password, newPassword}));
         dispatch(setPassword(''));
         dispatch(setNewPassword(''));

@@ -13,11 +13,14 @@ class OrderController extends Controller
             'orders.*.product_id' => 'required|exists:products,id',
             'orders.*.quantity' => 'required|integer|min:1',
             'orders.*.price' => 'required|numeric',
+            'shippingCost' => 'required|numeric',
         ]);
+
+        $totalPrice = collect($request->orders)->sum(fn($item) => $item['price'] * $item['quantity']) + $request->shippingCost;
 
         $order = Order::create([
             'user_id' => auth()->id(),
-            'total_price' => collect($request->orders)->sum(fn($item) => $item['price'] * $item['quantity']),
+            'total_price' => $totalPrice,
             'status' => 'pending',
         ]);
 

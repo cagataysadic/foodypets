@@ -40,19 +40,6 @@ const Checkout: React.FC = () => {
         dispatch(fetchCartItems())
     }, [dispatch]);
 
-    let orders: OrderItem[] = items.map((item) => ({
-        'product_id': item.product_id,
-        'quantity': item.quantity,
-        'price': item.price
-    }));
-    
-
-    const handleClick = () => {
-        dispatch(postOrderItems(orders))
-        dispatch(clearCart())
-        navigate('/products')
-    }
-
     const shippingMethods = [
         {
             id: 'Flat-Rate',
@@ -82,6 +69,25 @@ const Checkout: React.FC = () => {
     ))
     const subTotal: number = sum.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
     const total: number = subTotal + selectedMethodCost;
+
+    let orders: OrderItem[] = items.map((item) => ({
+        'product_id': item.product_id,
+        'quantity': item.quantity,
+        'price': item.price
+    }));
+    
+
+    const handleClick = () => {
+        const orderPayload = {
+            orders: orders,
+            shippingCost: selectedMethodCost
+        };
+    
+        dispatch(postOrderItems(orderPayload));
+        dispatch(clearCart());
+        navigate('/products');
+    };
+    
 
     return (
             <div className="bg-white flex flex-col items-center min-h-screen min-w-screen">

@@ -14,6 +14,12 @@ interface OrderState {
     error: string | null;
 }
 
+interface OrderPayload {
+    orders: OrderItem[];
+    shippingCost: number;
+}
+
+
 const initialState: OrderState = {
     orders: [],
     lastUpdated: 0,
@@ -21,18 +27,23 @@ const initialState: OrderState = {
     error: null
 };
 
-export const postOrderItems = createAsyncThunk<OrderItem[], OrderItem[], {rejectValue: string} >(
+export const postOrderItems = createAsyncThunk<
+    OrderItem[],
+    OrderPayload,
+    { rejectValue: string }
+>(
     'order/postOrderItems',
-    async (orders, { rejectWithValue }) => {
+    async (payload, { rejectWithValue }) => {
         const api = apiInstance;
         try {
-            const response = await api.post<OrderItem[]>('/orders', { orders });
+            const response = await api.post<OrderItem[]>('/orders', payload);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
     }
 );
+
 
 const orderSlice = createSlice({
     name: 'order',

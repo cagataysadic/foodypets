@@ -30,7 +30,6 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, {rejectValue: s
         const api = apiInstance;
         try {
             const response = await api.get<CartItem[]>('/cart-items');
-            console.log(response.data.map((item) => typeof item.quantity))
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
